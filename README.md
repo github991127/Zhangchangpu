@@ -1,0 +1,2 @@
+# egProject
+python入门
