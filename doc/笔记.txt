@@ -1,0 +1,5 @@
+
+●Pyinstaller打包PySide2为exe后报错。报错信息：This application failed to start because no Qt platform plugin
+环境中的PySide2\plugins\platforms的dll文件移入打包对应位置
+E:\anaconda\envs\pyside2\Lib\site-packages\PySide2\plugins\platforms
+E:\workplace_py\20221004_zhangchangpu_cal\dist\ui\PySide2\plugins\platforms
