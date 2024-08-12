@@ -2,14 +2,19 @@
 AI系统，三种模式选择拿走卡片的方案
 '''
 from zhangchangpu import *
+from collections import Counter
+from itertools import combinations
 
 
 # 数组补集
 def A_minus_B(A, B):
+    # 将列表A和B转换为集合
+    set_A = set(A)
     set_B = set(B)
-    # 列表推导式，保留B中不在A中的元素
-    A_minus_B = [x for i, x in enumerate(A) if x not in set_B or A[i:].count(x) > B.count(x)]
-    return A_minus_B
+    # 使用集合的差集操作从集合A中移除所有在集合B中出现的元素
+    result_set = set_A - set_B
+    # 将结果转换回列表（如果需要）
+    return list(result_set)
 
 
 def get_kind(kaka):
@@ -83,7 +88,6 @@ def normal(solution, list, kaka):
             kaka_card = kaka_solution
             player_card = player_solution
 
-    print("背包新增类：", res_difference)
     return player_card, kaka_card
 
 
@@ -134,37 +138,67 @@ def hard(solution, list, kaka, player):
             kaka_card = kaka_solution
             player_card = player_solution
 
-    print("背包新增类(减去玩家新增类)：", res_difference)
     return player_card, kaka_card
 
+
+def get_han_solution(player, card_list):
+    n = len(card_list) // 2
+    best_combo = []
+    max_value = -1
+
+    for combo in combinations(card_list, n):
+        new_player = player + list(combo)
+        counter = Counter(new_player)
+        value = sum(v ** 2 for v in counter.values())
+
+        if value > max_value:
+            max_value = value
+            best_combo = combo
+
+    return list(best_combo)
+
+
 def get_player_preview(player_preview, player_solution):
-    list_wastage = A_minus_B(list, player_solution + player_solution)
     # 获取前N/2的最多数量的种类
+    han_solution = get_han_solution(player_preview, player_solution)
+
     # 进入背包
-    for res in player_solution:
+    for res in han_solution:
         player_preview[res] += 1
 
     return player_preview
 
 
 def main():
-    player = [1, 1, 3, 1, 3, 0, 0, 0, 0, 0]
-    kaka = [0, 0, 0, 0, 0, 0, 3, 1, 3, 1]
-    list = [1, 1, 1, 3, 5, 6, 6, 7, 8, 8]
+    player = [0, 1, 1, 3, 1, 3, 1, 3, 1, 1]
+    kaka =   [0, 0, 0, 0, 0, 0, 0, 0, 0, 1]
+    list =   [1, 1, 1, 3, 5, 6, 6, 7, 8, 8]
+    kind_player = get_kind(player)
+    kind_kaka = get_kind(kaka)
+
+    # 生成所有方案
     print_card(list)
     solution = get_solution(list)
 
-    # player_card, kaka_card = easy(solution)
+    player_card, kaka_card = easy(solution)
     # player_card, kaka_card = normal(solution, list, kaka)
-    player_card, kaka_card = hard(solution, list, kaka, player)
+    # player_card, kaka_card = hard(solution, list, kaka[:], player[:])
 
-    kaka_preview = get_kaka_preview(kaka, kaka_card, list, player_card)
-    player_preview = get_kaka_preview(player, player_card, list, kaka_card)
+    kaka_preview = get_kaka_preview(kaka[:], kaka_card, list, player_card)
+    player_preview = get_player_preview(player[:], player_card)
 
-    print("卡卡拿走的卡片：", kaka_card)
-    print("卡卡的背包：", kaka_preview)
-    print("玩家拿走的卡片：", player_card)
-    print("玩家的背包：", player_preview)
+    kind_player_preview = get_kind(player_preview)
+    kind_kaka_preview = get_kind(kaka_preview)
+
+    print("卡卡的旧背包：", kaka)
+    print("卡卡方案：", kaka_card)
+    print("卡卡的新背包：", kaka_preview)
+    print("玩家的旧背包：", player)
+    print("玩家被分配的卡片：", get_han_solution(player[:], player_card))
+    print("玩家的新背包：", player_preview)
+    print("卡卡背包新增类：", kind_kaka_preview - kind_kaka)
+    print("玩家背包减少类：", kind_player - kind_player_preview)
+    print("总背包新增类：", kind_kaka_preview - kind_kaka + kind_player - kind_player_preview)
 
 
 if __name__ == "__main__":

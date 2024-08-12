@@ -1,31 +1,21 @@
 from collections import Counter
+from itertools import combinations
 
+def get_cards(player, card_list):
+    n = len(card_list) // 2
+    best_combo = []
+    max_value = -1
 
-def get_cards(player, list_to_draw):
-    # 计算需要获取的牌数（向下取整的一半）
-    target_cards = len(list_to_draw) // 2
+    for combo in combinations(card_list, n):
+        new_player = player + list(combo)
+        counter = Counter(new_player)
+        value = sum(v ** 2 for v in counter.values())
 
-    # 统计list_to_draw中每种牌的数量
-    card_counts = Counter(list_to_draw)
+        if value > max_value:
+            max_value = value
+            best_combo = combo
 
-    # 对card_counts进行排序，根据数量降序排列
-    sorted_cards = sorted(card_counts.items(), key=lambda x: x[1], reverse=True)
-
-    # 初始化一个列表来存储将要添加到player的牌
-    drawn_cards = []
-
-    # 遍历排序后的牌，选择足够数量的牌
-    for card, count in sorted_cards:
-        # 如果已经获取了足够的牌，则停止
-        if len(drawn_cards) >= target_cards:
-            break
-
-            # 选择当前牌直到达到目标数量或当前牌已取完
-        max_to_draw = min(count, target_cards - len(drawn_cards))
-        drawn_cards.extend([card] * max_to_draw)
-
-        # 返回抽取的牌
-    return drawn_cards
+    return list(best_combo)
 
 
 if __name__ == "__main__":
@@ -48,4 +38,4 @@ if __name__ == "__main__":
     player3 = [2, 3, 4, 4, 5, 5, 6, 6, 6, 7, 7, 7]
     list3 = [2, 2, 2, 3, 6, 9]
     # 将list3的3张牌[2, 2, 6]加入player3中是最优解，2变为3张，6变为4张
-    print(get_cards(player3[:], list3))  # 输出[2, 2, 6]
+    print(get_cards(player3[:], list3))  # 输出[2, 2, 2]/[2, 2, 6]
