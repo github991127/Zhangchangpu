@@ -1,0 +1,47 @@
+# Python / bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.manifest
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# PyInstaller
+# Keep checked-in specs, ignore editor backups
+*.spec~
+
+# Virtual environments
+venv/
+.env/
+.venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project-specific
+zcp/
+*.log
+
+# Historical / archived code (keep in repo, ignore future changes)
+archive/
+
+# Unused large binary duplicate (res/image.ico is the canonical icon)
+res/image.png
+
+# Duplicate icon in static (original kept in res/)
+static/image.png

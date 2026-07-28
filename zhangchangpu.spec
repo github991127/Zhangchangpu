@@ -1,24 +1,36 @@
 # -*- mode: python ; coding: utf-8 -*-
+import os
 
+from PyInstaller.building.build_main import Analysis, PYZ, EXE, COLLECT
 
 block_cipher = None
 
+# spec 文件位于项目根目录
+ROOT = os.path.dirname(os.path.abspath(SPECPATH))
 
 a = Analysis(
-    ['zhangchangpu_main.py'],
-    pathex=[],
+    ['app.py'],
+    pathex=[ROOT],
     binaries=[],
-    datas=[],
-    hiddenimports=['PySide2.QtXml'],
+    datas=[
+        ('templates', 'templates'),
+        ('static', 'static'),
+        ('res', 'res'),
+        ('source', 'source'),
+        ('routes', 'routes'),
+        ('utils', 'utils'),
+    ],
+    hiddenimports=['source.zhangchangpu', 'source.mizhu', 'source.dialogue'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=['PySide2', 'qt_material', 'PyQt5', 'PyQt6'],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=block_cipher,
     noarchive=False,
 )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=block_cipher)
 
 exe = EXE(
@@ -26,7 +38,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='zhangchangpu_main',
+    name='zhangchangpu',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -37,8 +49,9 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['image.ico'],
+    icon='res/image.ico',
 )
+
 coll = COLLECT(
     exe,
     a.binaries,
@@ -47,5 +60,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='zhangchangpu_main',
+    name='zhangchangpu',
 )

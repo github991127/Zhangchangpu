@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张菖蒲 / 糜竺 点数辅助工具</title>
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>张菖蒲 / 糜竺 点数辅助工具</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="切换深色模式" title="切换深色模式">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </header>
+
+        <nav class="tabs" role="tablist" aria-label="功能切换">
+            <button class="tab-button active" role="tab" aria-selected="true" aria-controls="zhangchangpu-tab" data-tab="zhangchangpu" id="tab-zhangchangpu">张菖蒲</button>
+            <button class="tab-button" role="tab" aria-selected="false" aria-controls="mizhu-tab" data-tab="mizhu" id="tab-mizhu">糜竺</button>
+        </nav>
+
+        <!-- 张菖蒲 Tab -->
+        <section id="zhangchangpu-tab" class="tab-panel active" role="tabpanel" aria-labelledby="tab-zhangchangpu">
+            <div class="input-section">
+                <div class="button-grid" data-target="zhangchangpu-input">
+                    <button data-value="1">1</button>
+                    <button data-value="2">2</button>
+                    <button data-value="3">3</button>
+                    <button data-value="4">4</button>
+                    <button data-value="5">5</button>
+                    <button data-value="6">6</button>
+                    <button data-value="7">7</button>
+                    <button data-value="8">8</button>
+                    <button data-value="9">9</button>
+                    <button data-value="10">10</button>
+                    <button data-value="J">J</button>
+                    <button data-value="Q">Q</button>
+                    <button data-value="K">K</button>
+                </div>
+                <div class="input-row">
+                    <input type="text" id="zhangchangpu-input" class="card-input" placeholder="请输入数字列表，空格隔开" autocomplete="off">
+                    <button class="action-btn enter-btn" data-action="enter" data-target="zhangchangpu">确认 Enter</button>
+                    <button class="action-btn backspace-btn" data-action="backspace" data-target="zhangchangpu">← 退格</button>
+                    <button class="action-btn delete-btn" data-action="delete" data-target="zhangchangpu">清空 Delete</button>
+                </div>
+                <div class="input-meta">
+                    <span class="card-count" data-target="zhangchangpu">0 张</span>
+                    <span class="input-hint">按 Enter 计算，Esc 清空</span>
+                </div>
+            </div>
+            <div class="output-section two-columns">
+                <div class="output-box">
+                    <div class="output-header">
+                        <h3>全部解</h3>
+                        <button class="copy-btn" data-copy-target="zhangchangpu-all" title="复制结果">复制</button>
+                    </div>
+                    <pre id="zhangchangpu-all" class="output-content" placeholder="这里显示全部解"></pre>
+                </div>
+                <div class="output-box">
+                    <div class="output-header">
+                        <h3>最优解</h3>
+                        <button class="copy-btn" data-copy-target="zhangchangpu-best" title="复制结果">复制</button>
+                    </div>
+                    <pre id="zhangchangpu-best" class="output-content" placeholder="这里显示最优解"></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 糜竺 Tab -->
+        <section id="mizhu-tab" class="tab-panel" role="tabpanel" aria-labelledby="tab-mizhu">
+            <div class="input-section">
+                <div class="button-grid" data-target="mizhu-input">
+                    <button data-value="1">1</button>
+                    <button data-value="2">2</button>
+                    <button data-value="3">3</button>
+                    <button data-value="4">4</button>
+                    <button data-value="5">5</button>
+                    <button data-value="6">6</button>
+                    <button data-value="7">7</button>
+                    <button data-value="8">8</button>
+                    <button data-value="9">9</button>
+                    <button data-value="10">10</button>
+                    <button data-value="J">J</button>
+                    <button data-value="Q">Q</button>
+                    <button data-value="K">K</button>
+                </div>
+                <div class="input-row">
+                    <input type="text" id="mizhu-input" class="card-input" placeholder="请输入数字列表，空格隔开" autocomplete="off">
+                    <button class="action-btn enter-btn" data-action="enter" data-target="mizhu">确认 Enter</button>
+                    <button class="action-btn backspace-btn" data-action="backspace" data-target="mizhu">← 退格</button>
+                    <button class="action-btn delete-btn" data-action="delete" data-target="mizhu">清空 Delete</button>
+                </div>
+                <div class="input-meta">
+                    <span class="card-count" data-target="mizhu">0 张</span>
+                    <span class="input-hint">按 Enter 计算，Esc 清空</span>
+                </div>
+            </div>
+            <div class="output-section">
+                <div class="output-box">
+                    <div class="output-header">
+                        <h3>所有和为 13 的组合</h3>
+                        <button class="copy-btn" data-copy-target="mizhu-output" title="复制结果">复制</button>
+                    </div>
+                    <pre id="mizhu-output" class="output-content" placeholder="这里显示全部解"></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- 历史记录 -->
+        <section class="history-section">
+            <button class="history-toggle" id="history-toggle" aria-expanded="false">
+                <span>历史记录</span>
+                <span class="history-chevron">▶</span>
+            </button>
+            <div class="history-panel" id="history-panel" hidden>
+                <ul id="history-list" class="history-list"></ul>
+                <button class="history-clear" id="history-clear">清空历史</button>
+            </div>
+        </section>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/dialogues.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

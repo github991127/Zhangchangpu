@@ -1,64 +1,60 @@
 '''
-输入数组，求所有target=13的组合
+输入数组，求所有 target 的组合
 '''
 
 
 class Solution:
     def __init__(self):
-        self.index = []  # 标记当前位置元素是否选中
-        self.solution = []
+        self.index = []
+        self.solution = set()
 
-    def findNum(self, nums, summ):
+    def findNum(self, nums, target):
         # 特例
-        if len(nums) == 1 and nums[0] == summ:
-            self.solution.append(nums)
-            return
+        if len(nums) == 1 and nums[0] == target:
+            return [nums]
         elif len(nums) == 1:
-            return
+            return []
 
         # 初始化
         self.index = [0] * len(nums)
-        self.solution = []
-        nums.sort()
+        self.solution = set()
+        nums = sorted(nums)
 
-        self.tryNext(0, nums, summ, 0)
-        return self.solution
+        self._try_next(0, nums, target, 0)
+        return [list(combo) for combo in self.solution]
 
-    def tryNext(self, i, nums, target, curSum):
+    def _try_next(self, i, nums, target, cur_sum):
         # 终止条件
-        if curSum == target:
-            temp = []
-            for i in range(len(nums)):
-                if self.index[i] == 1:
-                    temp.append(nums[i])
-            if temp not in self.solution:  # 去重
-                self.solution.append(temp)
+        if cur_sum == target:
+            temp = tuple(nums[j] for j in range(len(nums)) if self.index[j] == 1)
+            if temp:
+                self.solution.add(temp)
             return
-        if i == len(nums) or curSum > target:
+        if i == len(nums) or cur_sum > target:
             return
 
-        curSum += nums[i]
-        if curSum <= target:
+        cur_sum += nums[i]
+        if cur_sum <= target:
             self.index[i] = 1
-            self.tryNext(i + 1, nums, target, curSum)  # 采用此数字继续向后搜索，走左子树
-            curSum -= nums[i]
+            self._try_next(i + 1, nums, target, cur_sum)  # 采用此数字继续向后搜索，走左子树
+            cur_sum -= nums[i]
         else:
-            curSum -= nums[i]
+            cur_sum -= nums[i]
 
         # 不采用此数字继续向后搜索，走右子树
         self.index[i] = 0
-        self.tryNext(i + 1, nums, target, curSum)
+        self._try_next(i + 1, nums, target, cur_sum)
 
 
 def main():
     obj = Solution()
 
-    s = [3, 4, 5, 6, 7, 8, 9, 13]
+    nums = [3, 4, 5, 6, 7, 8, 9, 13]
     target = 13
 
-    x = obj.findNum(s, target)
-    for i in x:
-        print(i)
+    x = obj.findNum(nums, target)
+    for item in x:
+        print(item)
 
 
 if __name__ == '__main__':
